@@ -8,6 +8,7 @@ var Home = require('../js/Home.js');
 var Main = require('../js/main.js');
 var rol = require ('../js/rol.js');
 var programRanking = require ('../js/programRanking.js')
+var results = require ('../js/results.js')
 
 var routes = (
   <Router history={hashHistory}>
@@ -15,6 +16,7 @@ var routes = (
       <IndexRoute component={Home} />
       <Route path='rol' component={rol}/>
       <Route path='programRanking' component={programRanking}/>
+      <Route path='results' component={results}/>
     </Route>
   </Router>
 );

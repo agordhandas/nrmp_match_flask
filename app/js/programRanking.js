@@ -6,18 +6,33 @@ import Form from "react-jsonschema-form";
 //import schema from './form.js';
 
 var programRanking = React.createClass({
-	componentDidMount: function () {
+  contextTypes: {
+    router:React.PropTypes.object.isRequired
+  },
+  getInitialState: function () {
+    return {
+      schema:{}
+    }},
+
+	componentWillMount: function () {
   	var query=this.props.location.query;
-  	console.log(query['rol'])
+  	axios.post('get_program_schema', query).
+    then(function(value){this.setState({schema:value.data})}.bind(this));
+  },
+  onSubmit:function(form_data){
+    //console.log (form_data.formData)
+    axios.post('post_program_rankings', form_data.formData);
+    this.context.router.push ({pathname:'results'})
   },
 	render() {
     return (
-      <div>
-        <div className='col-sm-8 col-sm-offset-2 jumbotron col-sm-12 text-center'>
-         <h1>Where do you think the programs rank you? </h1>
-        </div>
+
+      <div className="jumbotron col-sm-12 text-center">
+      <div>WHERE</div>
+      <Form schema={this.state.schema}
+      onSubmit={this.onSubmit}/>
       </div>
-    	)
+      )
   }
 });
 

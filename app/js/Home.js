@@ -24,20 +24,38 @@ const home_form = {
 };
 
 var Home = React.createClass({
-
+  getInitialState: function () {
+    return {
+      basic_info: {"alias": "yoyo","specialty": "honey"},
+      schema:{}
+    }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
 	},
-	onSubmit: function (form_data) {
-		axios.post('post_basic_info', form_data.formData);
-		this.context.router.push({pathname:'rol/'})
-	},
+  handleUpdateUser: function(e){
+    this.setState ({
+      username : e.target.value
+    })
 
-  	render() {
+  },
+  componentWillMount: function() {
+    axios.get('/get_basic_info_schema').
+      then(function(value){this.setState({schema:value.data})}.bind(this))
+  },
+	onSubmit: function (form_data) {
+    
+    this.setState({basic_info: form_data.formData})
+		this.context.router.push({
+      pathname:'rol/', 
+      state:{
+          basic_info:form_data.formData
+        }})
+	},
+  render() {
     	return (
       	<div>
       		<div className="jumbotron col-sm-6 text-center">
-      			<Form schema={home_form}
+      			<Form schema={this.state.schema}
     			onSubmit={this.onSubmit}/>
       		</div>
       	</div>

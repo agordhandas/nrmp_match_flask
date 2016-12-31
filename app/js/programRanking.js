@@ -11,18 +11,25 @@ var programRanking = React.createClass({
   },
   getInitialState: function () {
     return {
-      schema:{}
+      schema:{},
+      rol: this.props.location.state.rol,
+      basic_info: this.props.location.state.basic_info
     }},
 
 	componentWillMount: function () {
-  	var query=this.props.location.query;
-  	axios.post('get_program_schema', query).
+  	axios.post('get_program_schema', this.state.rol).
     then(function(value){this.setState({schema:value.data})}.bind(this));
   },
   onSubmit:function(form_data){
     //console.log (form_data.formData)
-    axios.post('post_program_rankings', form_data.formData);
-    this.context.router.push ({pathname:'results'})
+    //axios.post('post_program_rankings', form_data.formData);
+    this.context.router.push ({pathname:'results',
+    state: {
+      rol: this.state.rol, 
+      program_rankings:form_data.formData,
+      basic_info: this.state.basic_info
+    }
+  })
   },
 	render() {
     return (

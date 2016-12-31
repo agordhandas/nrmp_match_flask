@@ -4,8 +4,8 @@ function getUser(){
   return axios.get('/get_value');
 }
 
-function getUserInfo(username){
-  return axios.get('https://api.github.com/users/' + username);
+function getRolSchema(){
+  return axios.get('/get_rol_schema')
 }
 
 var helpers = {

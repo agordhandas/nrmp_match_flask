@@ -7,7 +7,9 @@ var axios = require('axios');
 var rol = React.createClass({
 	getInitialState: function () {
   	return {
-  		schema:{}
+  		schema:{},
+  		basic_info: this.props.location.state.basic_info,
+  		first_three:[]
   	}},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -17,24 +19,34 @@ var rol = React.createClass({
 			form_data.formData.listOfStrings);
 		this.context.router.push ({
 				pathname: 'programRanking/',
-				query:{
-					rol:form_data.formData.listOfStrings
+				state:{
+					rol:form_data.formData.listOfStrings,
+					basic_info: this.state.basic_info
 				}
 	})
 	},
 	componentWillMount: function() {
-		axios.get('/get_rol_schema').
-			then(function(value){this.setState({schema:value.data})}.bind(this))
-		
+		var basic_info = this.state.basic_info
+		axios.post('/get_rol_schema', basic_info).
+			then(function(value){
+				this.setState({
+					schema:value.data,
+					first_three: {"listOfStrings":[
+					value.data.properties.listOfStrings.items.enum[0], 
+					value.data.properties.listOfStrings.items.enum[1],
+					value.data.properties.listOfStrings.items.enum[2]
+					]}
+				})}.bind(this))
+
 	},
-
 	render() {
-    return (
-
-    	<div className="jumbotron col-sm-12 text-center">
+	//console.log(formData)
+	return (
+		<div className="jumbotron col-sm-12 text-center">
     	<div>Prepare Your Rank Order List Here. Click the + sign to begin.</div>
     	<Form schema={this.state.schema}
-    	onSubmit={this.onSubmit}/>
+    	onSubmit={this.onSubmit}
+    	formData={this.state.first_three}/>
     	</div>
     	)
   }

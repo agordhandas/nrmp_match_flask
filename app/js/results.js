@@ -13,10 +13,10 @@ var results = React.createClass({
 		router:React.PropTypes.object.isRequired
 	},
 	componentWillMount: function (){
-		axios.get ('get_match_results').then(function(value){this.setState({match:value.data})}.bind(this));
+		axios.post ('get_match_results', this.props.location.state)
+		.then(function(value){this.setState({match:value.data})}.bind(this));
 	},
   	render() {
-  		console.log(this.state.match)
     	return (
       	<div>
       		<div className="jumbotron col-sm-6 text-center">

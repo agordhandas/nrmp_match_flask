@@ -9,7 +9,8 @@ var rol = React.createClass({
   	return {
   		schema:{},
   		basic_info: this.props.location.state.basic_info,
-  		first_three:[]
+  		//refill:{"listOfStrings":this.props.location.rol},
+  		prefill:{}
   	}},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -31,7 +32,7 @@ var rol = React.createClass({
 			then(function(value){
 				this.setState({
 					schema:value.data,
-					first_three: {"listOfStrings":[
+					prefill: {"listOfStrings":[
 					value.data.properties.listOfStrings.items.enum[0], 
 					value.data.properties.listOfStrings.items.enum[1],
 					value.data.properties.listOfStrings.items.enum[2]
@@ -40,14 +41,22 @@ var rol = React.createClass({
 
 	},
 	render() {
-	//console.log(formData)
+	//console.log(this.state.refill['listOfStrings']==undefined)
 	return (
-		<div className="jumbotron col-sm-12 text-center">
-    	<div>Prepare Your Rank Order List Here. Click the + sign to begin.</div>
-    	<Form schema={this.state.schema}
-    	onSubmit={this.onSubmit}
-    	formData={this.state.first_three}/>
+		<div className="col-md-6 col-md-offset-3 height:'400px'">
+			<br/><br/><br/>
+    		<div>Now let's prepare your rank order list. 
+    		The higher up a program, higher is your preference for it. 
+    		Select programs from the drop down menu. 
+    		You can add more programs by clicking on the plus button.
+    		Finally, The arrow keys allow you to move a program up or down. 
+    		<br/><br/>
+    		</div>
+    		<Form schema={this.state.schema}
+    		onSubmit={this.onSubmit}
+    		formData={this.state.prefill}/>
     	</div>
+
     	)
   }
 });

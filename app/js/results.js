@@ -7,7 +7,7 @@ import Form from "react-jsonschema-form";
 var results = React.createClass({
 	getInitialState: function () {
     return {
-      match:''
+      match:'Processing...'
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -19,7 +19,7 @@ var results = React.createClass({
   	render() {
     	return (
       	<div>
-      		<div className="jumbotron col-sm-6 text-center">
+      		<div className="jumbotron col-sm-12 text-center">
       		<div>{this.state.match}</div>	
       		</div>
       	</div>

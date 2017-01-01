@@ -72,9 +72,9 @@ def get_match_results():
     a = run_match.run_match (user_info, rank_order_list, estimated_program_rankings)
     matched_program_list = [program for program in a.keys() if data['basic_info']['alias'] in a[program]]
     if matched_program_list:
-        match = matched_program_list[0]
+        match = "Congrats %s! You matched at %s" % (user_info['alias'], matched_program_list[0])
     else:
-        match = "Did not match, sorry!"
+        match = "Aw shucks! You did not match to a program"
 
     return match
 

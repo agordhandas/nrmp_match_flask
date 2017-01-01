@@ -4,11 +4,11 @@ import sql_helper
 def generate_specialty_form():
     place_holder_schema = {
         "type": "object",
-        "title": "Pick your specialty",
+        "required":["alias", "specialty"],
         "properties": {
             "alias": {
                 "type": "string",
-                "title": "Pick a nickname"
+                "title": "Nickname"
             },
             "specialty": {
                 "type": "string",

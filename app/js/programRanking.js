@@ -34,8 +34,10 @@ var programRanking = React.createClass({
 	render() {
     return (
 
-      <div className="jumbotron col-sm-12 text-center">
-      <div>WHERE</div>
+      <div className="col-md-6 col-md-offset-3 height:'400px'">
+      <br/><br/><br/><br/>
+      <div>How do you think will each of these programs rank you?</div>
+      <br/><br/>
       <Form schema={this.state.schema}
       onSubmit={this.onSubmit}/>
       </div>

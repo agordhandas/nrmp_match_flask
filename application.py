@@ -6,7 +6,7 @@ from helpers import form_generation as fg
 from match_algo import run_match
 
 
-application = Flask(__name__)
+application = Flask(__name__, static_url_path='/static')
 
 
 @application.route('/')

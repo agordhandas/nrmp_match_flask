@@ -14,9 +14,12 @@ var results = React.createClass({
 	},
 	componentWillMount: function (){
 		axios.post ('get_match_results', this.props.location.state)
-		.then(function(value){this.setState({match:value.data})}.bind(this));
+		.then(function(value){this.setState({
+      match:value.data
+    })}.bind(this));
 	},
   	render() {
+      console.log (this.state.match)
     	return (
       	<div>
       		<div className="jumbotron col-sm-12 text-center">

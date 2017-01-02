@@ -57,7 +57,9 @@ def generate_program_form(programs):
 
         }
     }
-    properties_dict = {key: {'title':key, 'type':'integer'} for key in programs}
+    uischema = {"ui:order": programs}
+    properties_dict = {key: {'title': key, 'type': 'integer'} for key in programs}
     place_holder_schema['properties'] = properties_dict
-    return place_holder_schema
+    schema = place_holder_schema
+    return {'schema': schema, 'ui': uischema}
 

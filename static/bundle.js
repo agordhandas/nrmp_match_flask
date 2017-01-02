@@ -167,13 +167,13 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        ' Residency Match Simulator '
+	      ),
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-md-6 col-md-offset-3' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          ' Residency Match Simulator '
-	        ),
 	        _react2.default.createElement(
 	          'p',
 	          null,
@@ -32095,8 +32095,8 @@
 	var Home = __webpack_require__(2);
 	var Main = __webpack_require__(321);
 	var rol = __webpack_require__(322);
-	var programRanking = __webpack_require__(323);
-	var results = __webpack_require__(324);
+	var programRanking = __webpack_require__(324);
+	var results = __webpack_require__(325);
 
 	var routes = React.createElement(
 	  Router,
@@ -37143,7 +37143,7 @@
 
 	var _reactJsonschemaForm2 = _interopRequireDefault(_reactJsonschemaForm);
 
-	var _rol_form = __webpack_require__(325);
+	var _rol_form = __webpack_require__(323);
 
 	var _rol_form2 = _interopRequireDefault(_rol_form);
 
@@ -37211,6 +37211,27 @@
 
 /***/ },
 /* 323 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var schema = {
+	  "type": "object",
+	  "properties": {
+	    "listOfStrings": {
+	      "type": "array",
+	      "title": "A list of strings",
+	      "items": {
+	        "type": "string",
+	        "enum": ["MGH", "BIH", "UCSD"]
+	      }
+	    }
+	  }
+	};
+	module.exports = schema;
+
+/***/ },
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37239,6 +37260,7 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      schema: {},
+	      uischema: {},
 	      rol: this.props.location.state.rol,
 	      basic_info: this.props.location.state.basic_info
 	    };
@@ -37246,7 +37268,10 @@
 
 	  componentWillMount: function componentWillMount() {
 	    axios.post('get_program_schema', this.state.rol).then(function (value) {
-	      this.setState({ schema: value.data });
+	      this.setState({
+	        schema: value.data['schema'],
+	        uischema: value.data['ui']
+	      });
 	    }.bind(this));
 	  },
 	  onSubmit: function onSubmit(form_data) {
@@ -37276,7 +37301,8 @@
 	      _react2.default.createElement('br', null),
 	      _react2.default.createElement('br', null),
 	      _react2.default.createElement(_reactJsonschemaForm2.default, { schema: this.state.schema,
-	        onSubmit: this.onSubmit })
+	        onSubmit: this.onSubmit,
+	        uiSchema: this.state.uischema })
 	    );
 	  }
 	});
@@ -37284,7 +37310,7 @@
 	module.exports = programRanking;
 
 /***/ },
-/* 324 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37316,10 +37342,13 @@
 	  },
 	  componentWillMount: function componentWillMount() {
 	    axios.post('get_match_results', this.props.location.state).then(function (value) {
-	      this.setState({ match: value.data });
+	      this.setState({
+	        match: value.data
+	      });
 	    }.bind(this));
 	  },
 	  render: function render() {
+	    console.log(this.state.match);
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -37337,27 +37366,6 @@
 	});
 
 	module.exports = results;
-
-/***/ },
-/* 325 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var schema = {
-	  "type": "object",
-	  "properties": {
-	    "listOfStrings": {
-	      "type": "array",
-	      "title": "A list of strings",
-	      "items": {
-	        "type": "string",
-	        "enum": ["MGH", "BIH", "UCSD"]
-	      }
-	    }
-	  }
-	};
-	module.exports = schema;
 
 /***/ }
 /******/ ]);

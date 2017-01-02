@@ -12,13 +12,17 @@ var programRanking = React.createClass({
   getInitialState: function () {
     return {
       schema:{},
+      uischema:{},
       rol: this.props.location.state.rol,
       basic_info: this.props.location.state.basic_info
     }},
 
 	componentWillMount: function () {
   	axios.post('get_program_schema', this.state.rol).
-    then(function(value){this.setState({schema:value.data})}.bind(this));
+    then(function(value){this.setState({
+      schema:value.data['schema'],
+      uischema:value.data['ui']
+    })}.bind(this));
   },
   onSubmit:function(form_data){
     //console.log (form_data.formData)
@@ -39,7 +43,8 @@ var programRanking = React.createClass({
       <div>How do you think will each of these programs rank you?</div>
       <br/><br/>
       <Form schema={this.state.schema}
-      onSubmit={this.onSubmit}/>
+      onSubmit={this.onSubmit}
+      uiSchema={this.state.uischema}/>
       </div>
       )
   }

@@ -3,11 +3,16 @@ import Children from 'react';
 var axios = require('axios');
 var helpers = require ('./helpers.js');
 import Form from "react-jsonschema-form";
+import JsonTable from "react-json-table"
+
+const columns = [
+    {key:'program', label:'Program'},
+    {key: 'chances', label: 'Chances'}]
 
 var results = React.createClass({
 	getInitialState: function () {
     return {
-      match:'Processing...'
+      match:[{'program':'processing', 'chances':'processing'}]
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -23,7 +28,7 @@ var results = React.createClass({
     	return (
       	<div>
       		<div className="jumbotron col-sm-12 text-center">
-      		<div>{this.state.match}</div>	
+      		<div><JsonTable rows={this.state.match} columns={columns} /></div>	
       		</div>
       	</div>
     	)

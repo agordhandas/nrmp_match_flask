@@ -73,8 +73,7 @@ def get_match_results():
     #    match = "Congrats %s! You matched at %s" % (user_info['alias'], matched_program_list[0])
     #else:
     #    match = "Aw shucks! You did not match to a program"
-
-    return str([rank_order_list[0], a[rank_order_list[0]]])
+    return json.dumps([{'program': k, 'chances': float(v)/sum(a.values())*100} for k,v in a.iteritems()])
 
 if __name__ == '__main__':
     application.run(debug=True)

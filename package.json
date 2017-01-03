@@ -20,6 +20,7 @@
   "dependencies": {
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
+    "react-json-table": "^0.1.1",
     "react-jsonschema-form": "^0.41.2",
     "react-router": "^3.0.0",
     "react-sortable": "^1.2.0"

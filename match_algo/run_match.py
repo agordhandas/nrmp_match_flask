@@ -64,7 +64,7 @@ def run_match_simulation(user_info, rank_order_list, estimated_program_rankings)
     return a
 
 
-def run_match(user_info, rank_order_list, estimated_program_rankings, number_of_simulations=100):
+def run_match(user_info, rank_order_list, estimated_program_rankings, number_of_simulations=20):
     #Run simulation set number of times
     simulation_results = []
     for i in range(number_of_simulations):

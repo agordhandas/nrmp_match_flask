@@ -57,7 +57,21 @@ def generate_program_form(programs):
 
         }
     }
-    properties_dict = {key: {'title':key, 'type':'integer'} for key in programs}
+    uischema = {"ui:order": programs}
+    properties_dict = {key: {'title': key, 'type': 'integer'} for key in programs}
     place_holder_schema['properties'] = properties_dict
-    return place_holder_schema
+    schema = place_holder_schema
+    return {'schema': schema, 'ui': uischema}
 
+
+def generate_table(match_results_dict):
+    match_results = [[key, value] for key, value in match_results_dict.iteritems()] #tuple
+    table_frame = """<table>
+                        <tr>
+                            <th>Program</th>
+                            <th>Chances</th>
+                        </tr>
+                    </table>"""
+    for entry in match_results:
+        table_frame = table_frame +  ("""<tr><td>%s</td><td>%s</td></tr>""") % (entry[0], str(float(entry[1])/sum(match_results_dict.values())*100))
+    return table_frame

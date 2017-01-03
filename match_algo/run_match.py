@@ -5,7 +5,7 @@ from helpers import sql_helper
 import random
 
 
-def run_match(user_info, rank_order_list, estimated_program_rankings):
+def run_match_simulation(user_info, rank_order_list, estimated_program_rankings):
 
     #TODO: basic_info->specialty->programs
     #TODO: specialty -> number of applicants
@@ -60,4 +60,24 @@ def run_match(user_info, rank_order_list, estimated_program_rankings):
         program_class.insert_candidate_rank (program, alias, rank)
 
     a = match_algo.run_algo(applicants_class, program_class)
+
     return a
+
+
+def run_match(user_info, rank_order_list, estimated_program_rankings, number_of_simulations=100):
+    #Run simulation set number of times
+    simulation_results = []
+    for i in range(number_of_simulations):
+        a = run_match_simulation(user_info, rank_order_list, estimated_program_rankings)
+        matched_program_list = [program for program in a.keys() if user_info['alias'] in a[program]]
+        if matched_program_list:
+            simulation_results.append(matched_program_list[0])
+        else:
+            simulation_results.append('None')
+
+    #Get the most common result
+    unique_results = list(set(simulation_results))
+    result_count = {program: 0 for program in unique_results}
+    for program in simulation_results:
+        result_count.update({program:result_count[program] + 1})
+    return result_count

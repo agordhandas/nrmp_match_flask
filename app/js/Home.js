@@ -54,8 +54,8 @@ var Home = React.createClass({
   render() {
     	return (
       	<div>
-          <h1> Residency Match Simulator </h1>
       		<div className="col-md-6 col-md-offset-3">
+          <h1> Residency Match Simulator </h1>
           <p>Every year, thousands of medical students and recently graduated doctors 
           apply for residency spots across the country. The match process, called the 
           National Residency Match Program (NRMP) involves residency aspirants applying to

@@ -12,7 +12,7 @@ const columns = [
 var results = React.createClass({
 	getInitialState: function () {
     return {
-      match:[{'program':'processing', 'chances':'processing'}]
+      match:[{'program':'processing', 'chances':'This may take a minute to load...'}]
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired

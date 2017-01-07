@@ -28,7 +28,7 @@ var results = React.createClass({
     	return (
       	<div>
       		<div className="jumbotron col-sm-12 text-center">
-      		<div><JsonTable rows={this.state.match} columns={columns} /></div>	
+      		<div><JsonTable rows={this.state.match} columns={columns}/></div>
       		</div>
       	</div>
     	)

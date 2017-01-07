@@ -5,24 +5,6 @@ var helpers = require ('./helpers.js');
 import Form from "react-jsonschema-form";
 //import schema from './form.js';
 
-const home_form = {
-  "title": "some description about match",
-  "description": "Let's get started",
-  "type": "object",
-  "required": [
-  ],
-  "properties": {
-    "alias": {
-      "type": "string",
-      "title": "Pick an alias"
-    },
-    "specialty": {
-      "type": "string",
-      "title": "What's your specialty?"
-    }
-  }
-};
-
 var Home = React.createClass({
   getInitialState: function () {
     return {
@@ -71,7 +53,8 @@ var Home = React.createClass({
             
             <p> To start off, pick a nickname for yourself and a specialty </p>
       			 <Form schema={this.state.schema}
-    			   onSubmit={this.onSubmit}/>
+    			   onSubmit={this.onSubmit}
+                 />
            
       		</div>
       	</div>

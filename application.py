@@ -4,9 +4,6 @@ import pickle
 from flask import Flask, render_template, request
 from helpers import form_generation as fg
 from match_algo import run_match
-from flask import Response
-import numpy as np
-import time
 
 application = Flask(__name__)
 

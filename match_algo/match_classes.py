@@ -1,6 +1,8 @@
 __author__ = 'AnkitGordhandas'
 
 from random import shuffle
+import operator
+
 class Applicants:
     """
     example of applicant ranking dictionary:
@@ -20,7 +22,7 @@ class Applicants:
     def __init__(self, applicants_rankings):
         self.applicant_rankings = applicants_rankings
         self.applicants = (self.applicant_rankings.keys())
-        _ignore = shuffle (self.applicants)
+        _ignore = shuffle(self.applicants)
 
     def isEmpty(self):
         return self.applicants == []
@@ -29,7 +31,7 @@ class Applicants:
         return self.applicants.pop()
 
     def reinsertApplicant(self, applicant):
-        if applicant in self.applicant_rankings.keys():
+        if applicant in self.applicant_rankings:
             self.applicants.insert(0, applicant)
         else:
             print "%s does not have rankings associated" %(applicant)
@@ -37,10 +39,10 @@ class Applicants:
     def applicantRankingList(self, applicant):
         return self.applicant_rankings[applicant]
 
-    def add_applicant (self, applicant_name):
+    def add_applicant(self, applicant_name):
         self.applicants.append(applicant_name)
 
-    def modify_applicant_rankings (self, applicant_name, applicant_rankings):
+    def modify_applicant_rankings(self, applicant_name, applicant_rankings):
         self.applicant_rankings[applicant_name] = applicant_rankings
 
 
@@ -54,7 +56,7 @@ class tempMatchBuffer:
         }
         """
         self.program_list = program_list
-        self.match_buffer = {program:[] for program in program_list.keys()}
+        self.match_buffer = {program: [] for program in program_list}
 
     def checkProgramHasSpace(self, program):
         return len(self.match_buffer[program]) < self.program_list[program]['positions']
@@ -69,16 +71,17 @@ class tempMatchBuffer:
         return self.program_list[program]['rankings'].index(applicant)
 
     def lowerRankedCandidate(self, program, applicant):
-        matched_applicant_ranks = {matched_applicant: self.positionOfApplicant(program, matched_applicant) for matched_applicant in self.match_buffer[program]}
+        matched_applicant_ranks = {matched_applicant: self.positionOfApplicant(program, matched_applicant) for
+                                   matched_applicant in self.match_buffer[program]}
         this_applicant_rank = self.positionOfApplicant(program, applicant)
 
         if any([this_applicant_rank < x for x in matched_applicant_ranks.values()]):
-            lowest_rank_candidate = [key for key,value in matched_applicant_ranks.iteritems() if value == max(matched_applicant_ranks.values())][0]
+            lowest_rank_candidate = max(matched_applicant_ranks.iteritems(), key=operator.itemgetter(1))[0]
         else:
             lowest_rank_candidate = ''
         return lowest_rank_candidate
 
-    def insert_candidate_rank (self, program, applicant, rank):
+    def insert_candidate_rank(self, program, applicant, rank):
         self.program_list[program]['rankings'].insert(rank - 1, applicant)
 
     def remove_candidate(self, program, applicant):
@@ -88,11 +91,12 @@ class tempMatchBuffer:
         self.remove_candidate(program, applicant)
         self.insert_candidate_rank(program, applicant, new_rank)
 
-    def unseatCandidate (self, program, applicant):
+    def unseatCandidate(self, program, applicant):
         if applicant in self.match_buffer[program]:
             self.match_buffer[program].remove(applicant)
+            return 0
         else:
-            print "%s has not been matched to %s" % (applicant, program)
+            return 0
 
 
 

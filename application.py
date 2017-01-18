@@ -4,7 +4,9 @@ import pickle
 from flask import Flask, render_template, request
 from helpers import form_generation as fg
 from match_algo import run_match
-
+from flask import Response
+import numpy as np
+import time
 
 application = Flask(__name__)
 
@@ -58,7 +60,7 @@ def get_rol_schema():
     #print field
     return json.dumps(fg.generate_rol_form(field))
 
-@application.route ('/get_match_results', methods=['POST'])
+@application.route('/get_match_results', methods=['POST'])
 def get_match_results():
     r = request.get_json()
     data = json.loads(request.data)
@@ -66,14 +68,16 @@ def get_match_results():
     rank_order_list = data['rol']
     estimated_program_rankings = data['program_rankings']
     user_info = data['basic_info']
+    #yield 0
     a = run_match.run_match(user_info, rank_order_list, estimated_program_rankings)
+    #request
     match_text = ""
     #matched_program_list = [program for program in a.keys() if data['basic_info']['alias'] in a[program]]
     #if matched_program_list:
     #    match = "Congrats %s! You matched at %s" % (user_info['alias'], matched_program_list[0])
     #else:
     #    match = "Aw shucks! You did not match to a program"
-    return json.dumps([{'program': k, 'chances': float(v)/sum(a.values())*100} for k,v in a.iteritems()])
+    return json.dumps([{'program': k, 'chances': float(v) / sum(a.values()) * 100} for k, v in a.iteritems()])
 
 if __name__ == '__main__':
     application.run(debug=True)

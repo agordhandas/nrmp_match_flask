@@ -3,11 +3,15 @@ import Children from 'react';
 import Form from "react-jsonschema-form";
 import schema from './rol_form.js';
 var axios = require('axios');
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
+var rolForm = require('../Forms/rol_form.js')
 
 var rol = React.createClass({
 	getInitialState: function () {
   	return {
-  		schema:{},
+  		schema:rolForm,
+  		options:[],
   		basic_info: this.props.location.state.basic_info,
   		//refill:{"listOfStrings":this.props.location.rol},
   		prefill:{}
@@ -16,6 +20,10 @@ var rol = React.createClass({
 		router:React.PropTypes.object.isRequired
 	},
 	onSubmit(form_data) {
+		AppDispatcher.handleAction({
+        actionType: "SET_ROL",
+        data: form_data.formData.listOfStrings
+      })
 		axios.post('post_rol', 
 			form_data.formData.listOfStrings);
 		this.context.router.push ({
@@ -28,20 +36,25 @@ var rol = React.createClass({
 	},
 	componentWillMount: function() {
 		var basic_info = this.state.basic_info
+
 		axios.post('/get_rol_schema', basic_info).
 			then(function(value){
+				var mySchema = this.state.schema
+				console.log("ttt", mySchema)
+				mySchema.properties.listOfStrings.items.enum = value.data
 				this.setState({
-					schema:value.data,
+					schema: mySchema,
 					prefill: {"listOfStrings":[
-					value.data.properties.listOfStrings.items.enum[0], 
-					value.data.properties.listOfStrings.items.enum[1],
-					value.data.properties.listOfStrings.items.enum[2]
+					value.data[0], 
+					value.data[1],
+					value.data[2]
 					]}
 				})}.bind(this))
 
 	},
 	render() {
 	//console.log(this.state.refill['listOfStrings']==undefined)
+	console.log(this.state.schema)
 	return (
 		<div className="col-md-6 col-md-offset-3 height:'400px'">
 			<br/><br/><br/>

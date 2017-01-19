@@ -4,6 +4,8 @@ var axios = require('axios');
 var helpers = require ('./helpers.js');
 import Form from "react-jsonschema-form";
 import JsonTable from "react-json-table"
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 
 const columns = [
     {key:'program', label:'Program'},
@@ -22,6 +24,7 @@ var results = React.createClass({
 		.then(function(value){this.setState({
       match:value.data
     })}.bind(this));
+    console.log(store.getProgramRankings())
 	},
   	render() {
       console.log (this.state.match)

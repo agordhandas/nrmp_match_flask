@@ -16,8 +16,14 @@ def hello_world():
 def get_value():
     return "myAnkit"
 
+@application.route('/print_this')
+def print_this():
+    r = request.get_json()
+    print json.loads(request.data)
+
 @application.route('/get_basic_info_schema')
 def get_basic_info_schema():
+    print(json.dumps(fg.generate_specialty_form()))
     return json.dumps(fg.generate_specialty_form())
 
 @application.route('/post_basic_info', methods=['POST'])

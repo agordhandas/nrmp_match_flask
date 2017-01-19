@@ -3,7 +3,14 @@ import Children from 'react';
 var axios = require('axios');
 var helpers = require ('./helpers.js');
 import Form from "react-jsonschema-form";
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 //import schema from './form.js';
+const formData = {
+  'Baylor College of Medicine Program':31,
+  'Allegheny Health Network Medical Education Consortium (AGH) Program': 21,
+  'Albany Medical Center Program': 2
+}
 
 var programRanking = React.createClass({
   contextTypes: {
@@ -13,8 +20,9 @@ var programRanking = React.createClass({
     return {
       schema:{},
       uischema:{},
-      rol: this.props.location.state.rol,
-      basic_info: this.props.location.state.basic_info
+      rol: store.getRol(),
+      basic_info: this.props.location.state.basic_info,
+      formData: store.getProgramRankings()
     }},
 
 	componentWillMount: function () {
@@ -27,6 +35,10 @@ var programRanking = React.createClass({
   onSubmit:function(form_data){
     //console.log (form_data.formData)
     //axios.post('post_program_rankings', form_data.formData);
+    AppDispatcher.handleAction({
+        actionType: "SET_PROGRAM_RANKINGS",
+        data: form_data.formData
+      })
     this.context.router.push ({pathname:'results',
     state: {
       rol: this.state.rol, 
@@ -36,7 +48,9 @@ var programRanking = React.createClass({
   })
   },
 	render() {
+    console.log(this.state.formData)
     return (
+      
 
       <div className="col-md-6 col-md-offset-3 height:'400px'">
       <br/><br/><br/><br/>
@@ -44,7 +58,8 @@ var programRanking = React.createClass({
       <br/><br/>
       <Form schema={this.state.schema}
       onSubmit={this.onSubmit}
-      uiSchema={this.state.uischema}/>
+      uiSchema={this.state.uischema}
+      />
       </div>
       )
   }

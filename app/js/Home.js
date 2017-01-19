@@ -2,32 +2,26 @@ import React from 'react';
 import Children from 'react';
 var axios = require('axios');
 var helpers = require ('./helpers.js');
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
+var home_form = require('../Forms/homeForm')
 import Form from "react-jsonschema-form";
 //import schema from './form.js';
 
-const home_form = {
-  "title": "some description about match",
-  "description": "Let's get started",
-  "type": "object",
-  "required": [
-  ],
-  "properties": {
-    "alias": {
-      "type": "string",
-      "title": "Pick an alias"
-    },
-    "specialty": {
-      "type": "string",
-      "title": "What's your specialty?"
-    }
-  }
+
+
+const formData = {
+  alias: "First task",
+  specialty: "Pathology"
 };
+
 
 var Home = React.createClass({
   getInitialState: function () {
     return {
-      basic_info: {"alias": "yoyo","specialty": "honey"},
-      schema:{}
+      basic_info: store.getBasicInfo(),
+      schema:home_form,
+      formData:{alias:"AG"}
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -39,8 +33,10 @@ var Home = React.createClass({
 
   },
   componentWillMount: function() {
-    axios.get('/get_basic_info_schema').
-      then(function(value){this.setState({schema:value.data})}.bind(this))
+      AppDispatcher.handleAction({
+        actionType: "SET_ALIAS",
+        data: "NM"
+      }) 
   },
 	onSubmit: function (form_data) {
     
@@ -52,6 +48,8 @@ var Home = React.createClass({
         }})
 	},
   render() {
+    console.log('this', typeof(this.state.schema))
+    console.log('th1s', typeof(home_form))
     	return (
       	<div>
       		<div className="col-md-6 col-md-offset-3">
@@ -70,8 +68,12 @@ var Home = React.createClass({
           <hr/>
             
             <p> To start off, pick a nickname for yourself and a specialty </p>
-      			 <Form schema={this.state.schema}
-    			   onSubmit={this.onSubmit}/>
+      			 <Form schema={home_form}
+             onSubmit={this.onSubmit}
+             formData={this.state.formData}
+             
+             />
+            
            
       		</div>
       	</div>

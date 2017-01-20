@@ -99,8 +99,6 @@
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -130,37 +128,27 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      basic_info: store.getBasicInfo(),
 	      schema: home_form,
-	      formData: { alias: "AG" }
+	      formData: store.getBasicInfo()
 	    };
 	  },
 	  contextTypes: {
 	    router: _react2.default.PropTypes.object.isRequired
 	  },
-	  handleUpdateUser: function handleUpdateUser(e) {
-	    this.setState({
-	      username: e.target.value
-	    });
-	  },
-	  componentWillMount: function componentWillMount() {
-	    AppDispatcher.handleAction({
-	      actionType: "SET_ALIAS",
-	      data: "NM"
-	    });
-	  },
-	  onSubmit: function onSubmit(form_data) {
 
-	    this.setState({ basic_info: form_data.formData });
+	  componentWillMount: function componentWillMount() {},
+
+	  onSubmit: function onSubmit(form_data) {
+	    AppDispatcher.handleAction({
+	      actionType: "SET_BASIC_INFO",
+	      data: form_data.formData
+	    });
 	    this.context.router.push({
-	      pathname: 'rol/',
-	      state: {
-	        basic_info: form_data.formData
-	      } });
+	      pathname: 'rol/'
+	    });
 	  },
 	  render: function render() {
-	    console.log('this', _typeof(this.state.schema));
-	    console.log('th1s', typeof home_form === 'undefined' ? 'undefined' : _typeof(home_form));
+
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -14190,7 +14178,7 @@
 	var EventEmitter = __webpack_require__(115).EventEmitter;
 
 	var _store = {
-	  basic_info: { "alias": "yoyo", "specialty": "Pathology" },
+	  basic_info: {},
 	  programRankings: {},
 	  rol: {}
 	};
@@ -14216,16 +14204,15 @@
 	AppDispatcher.register(function (payload) {
 	  var action = payload.action;
 	  switch (action.actionType) {
-	    case "SET_ALIAS":
+	    case "SET_BASIC_INFO":
 	      _store.basic_info = action.data;
 	      break;
+
 	    case "SET_PROGRAM_RANKINGS":
 	      _store.programRankings = action.data;
 	      break;
 	    case "SET_ROL":
-	      console.log("This");
 	      _store.rol = action.data;
-	      console.log(_store.rol);
 	    default:
 	      return true;
 	  }
@@ -32814,8 +32801,8 @@
 	var Home = __webpack_require__(2);
 	var Main = __webpack_require__(328);
 	var rol = __webpack_require__(329);
-	var programRanking = __webpack_require__(330);
-	var results = __webpack_require__(331);
+	var programRanking = __webpack_require__(331);
+	var results = __webpack_require__(332);
 
 	var routes = React.createElement(
 	  Router,
@@ -37862,16 +37849,22 @@
 
 	var _reactJsonschemaForm2 = _interopRequireDefault(_reactJsonschemaForm);
 
-	var _rol_form = __webpack_require__(333);
-
-	var _rol_form2 = _interopRequireDefault(_rol_form);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var axios = __webpack_require__(84);
 	var store = __webpack_require__(110);
 	var AppDispatcher = __webpack_require__(111);
-	var rolForm = __webpack_require__(334);
+	var rolForm = __webpack_require__(330);
+
+	var isEmpty = function isEmpty(obj) {
+		var p;
+		for (p in obj) {
+			if (obj.hasOwnProperty(p)) {
+				return false;
+			}
+		}
+		return true;
+	};
 
 	var rol = _react2.default.createClass({
 		displayName: 'rol',
@@ -37880,8 +37873,9 @@
 			return {
 				schema: rolForm,
 				options: [],
-				basic_info: this.props.location.state.basic_info,
+				basic_info: store.getBasicInfo(),
 				//refill:{"listOfStrings":this.props.location.rol},
+				formData: store.getRol(),
 				prefill: {}
 			};
 		},
@@ -37891,24 +37885,19 @@
 		onSubmit: function onSubmit(form_data) {
 			AppDispatcher.handleAction({
 				actionType: "SET_ROL",
-				data: form_data.formData.listOfStrings
+				data: form_data.formData
 			});
-			axios.post('post_rol', form_data.formData.listOfStrings);
 			this.context.router.push({
-				pathname: 'programRanking/',
-				state: {
-					rol: form_data.formData.listOfStrings,
-					basic_info: this.state.basic_info
-				}
+				pathname: 'programRanking/'
+
 			});
 		},
 
 		componentWillMount: function componentWillMount() {
-			var basic_info = this.state.basic_info;
+			var basic_info = store.getBasicInfo();
 
 			axios.post('/get_rol_schema', basic_info).then(function (value) {
 				var mySchema = this.state.schema;
-				console.log("ttt", mySchema);
 				mySchema.properties.listOfStrings.items.enum = value.data;
 				this.setState({
 					schema: mySchema,
@@ -37917,8 +37906,8 @@
 			}.bind(this));
 		},
 		render: function render() {
-			//console.log(this.state.refill['listOfStrings']==undefined)
-			console.log(this.state.schema);
+			var rolData = store.getRol();
+			var formData = isEmpty(rolData) ? this.state.prefill : store.getRol();
 			return _react2.default.createElement(
 				'div',
 				{ className: 'col-md-6 col-md-offset-3 height:\'400px\'' },
@@ -37934,7 +37923,7 @@
 				),
 				_react2.default.createElement(_reactJsonschemaForm2.default, { schema: this.state.schema,
 					onSubmit: this.onSubmit,
-					formData: this.state.prefill })
+					formData: formData })
 			);
 		}
 	});
@@ -37943,6 +37932,28 @@
 
 /***/ },
 /* 330 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var rolForm = {
+	    "type": "object",
+	    "properties": {
+	        "listOfStrings": {
+	            "type": "array",
+	            "title": "",
+	            "items": {
+	                "type": "string",
+	                "enum": []
+	            }
+	        }
+	    }
+	};
+
+	module.exports = rolForm;
+
+/***/ },
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37963,11 +37974,9 @@
 	var store = __webpack_require__(110);
 	var AppDispatcher = __webpack_require__(111);
 	//import schema from './form.js';
-	var formData = {
-	  'Baylor College of Medicine Program': 31,
-	  'Allegheny Health Network Medical Education Consortium (AGH) Program': 21,
-	  'Albany Medical Center Program': 2
-	};
+
+	var schema_shell = { "type": "object", "properties": {} };
+	var ui_shell = { "ui:order": [] };
 
 	var programRanking = _react2.default.createClass({
 	  displayName: 'programRanking',
@@ -37980,36 +37989,31 @@
 	      schema: {},
 	      uischema: {},
 	      rol: store.getRol(),
-	      basic_info: this.props.location.state.basic_info,
+	      basic_info: store.getBasicInfo(),
 	      formData: store.getProgramRankings()
 	    };
 	  },
 
 	  componentWillMount: function componentWillMount() {
-	    axios.post('get_program_schema', this.state.rol).then(function (value) {
-	      this.setState({
-	        schema: value.data['schema'],
-	        uischema: value.data['ui']
-	      });
-	    }.bind(this));
+	    var rol = this.state.rol.listOfStrings;
+	    schema_shell.properties = rol.reduce(function (result, item) {
+	      result[item] = { "title": item, type: "integer" };return result;
+	    }, {});
+	    ui_shell["ui:order"] = rol;
+	    this.setState({
+	      schema: schema_shell,
+	      uischema: ui_shell
+	    });
 	  },
 	  onSubmit: function onSubmit(form_data) {
-	    //console.log (form_data.formData)
-	    //axios.post('post_program_rankings', form_data.formData);
 	    AppDispatcher.handleAction({
 	      actionType: "SET_PROGRAM_RANKINGS",
 	      data: form_data.formData
 	    });
-	    this.context.router.push({ pathname: 'results',
-	      state: {
-	        rol: this.state.rol,
-	        program_rankings: form_data.formData,
-	        basic_info: this.state.basic_info
-	      }
+	    this.context.router.push({ pathname: 'results'
 	    });
 	  },
 	  render: function render() {
-	    console.log(this.state.formData);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'col-md-6 col-md-offset-3 height:\'400px\'' },
@@ -38026,7 +38030,8 @@
 	      _react2.default.createElement('br', null),
 	      _react2.default.createElement(_reactJsonschemaForm2.default, { schema: this.state.schema,
 	        onSubmit: this.onSubmit,
-	        uiSchema: this.state.uischema
+	        uiSchema: this.state.uischema,
+	        formData: this.state.formData
 	      })
 	    );
 	  }
@@ -38035,7 +38040,7 @@
 	module.exports = programRanking;
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38048,7 +38053,7 @@
 
 	var _reactJsonschemaForm2 = _interopRequireDefault(_reactJsonschemaForm);
 
-	var _reactJsonTable = __webpack_require__(332);
+	var _reactJsonTable = __webpack_require__(333);
 
 	var _reactJsonTable2 = _interopRequireDefault(_reactJsonTable);
 
@@ -38074,15 +38079,18 @@
 	    router: _react2.default.PropTypes.object.isRequired
 	  },
 	  componentWillMount: function componentWillMount() {
-	    axios.post('get_match_results', this.props.location.state).then(function (value) {
+	    var input_data = {
+	      'rol': store.getRol().listOfStrings,
+	      'program_rankings': store.getProgramRankings(),
+	      'basic_info': store.getBasicInfo()
+	    };
+	    axios.post('get_match_results', input_data).then(function (value) {
 	      this.setState({
 	        match: value.data
 	      });
 	    }.bind(this));
-	    console.log(store.getProgramRankings());
 	  },
 	  render: function render() {
-	    console.log(this.state.match);
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -38102,7 +38110,7 @@
 	module.exports = results;
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(3);
@@ -38335,49 +38343,6 @@
 
 	module.exports = JsonTable;
 
-
-/***/ },
-/* 333 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var schema = {
-	  "type": "object",
-	  "properties": {
-	    "listOfStrings": {
-	      "type": "array",
-	      "title": "A list of strings",
-	      "items": {
-	        "type": "string",
-	        "enum": ["MGH", "BIH", "UCSD"]
-	      }
-	    }
-	  }
-	};
-	module.exports = schema;
-
-/***/ },
-/* 334 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var rolForm = {
-	    "type": "object",
-	    "properties": {
-	        "listOfStrings": {
-	            "type": "array",
-	            "title": "",
-	            "items": {
-	                "type": "string",
-	                "enum": []
-	            }
-	        }
-	    }
-	};
-
-	module.exports = rolForm;
 
 /***/ }
 /******/ ]);

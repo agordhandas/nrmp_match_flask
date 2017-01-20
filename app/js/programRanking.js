@@ -6,11 +6,9 @@ import Form from "react-jsonschema-form";
 var store = require('../Stores/stores.js')
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 //import schema from './form.js';
-const formData = {
-  'Baylor College of Medicine Program':31,
-  'Allegheny Health Network Medical Education Consortium (AGH) Program': 21,
-  'Albany Medical Center Program': 2
-}
+
+const schema_shell = {"type": "object", "properties":{}};
+const ui_shell = {"ui:order": []}
 
 var programRanking = React.createClass({
   contextTypes: {
@@ -21,34 +19,28 @@ var programRanking = React.createClass({
       schema:{},
       uischema:{},
       rol: store.getRol(),
-      basic_info: this.props.location.state.basic_info,
+      basic_info: store.getBasicInfo(),
       formData: store.getProgramRankings()
     }},
 
 	componentWillMount: function () {
-  	axios.post('get_program_schema', this.state.rol).
-    then(function(value){this.setState({
-      schema:value.data['schema'],
-      uischema:value.data['ui']
-    })}.bind(this));
+    var rol = this.state.rol.listOfStrings
+    schema_shell.properties = rol.reduce(function(result, item) {result[item] = {"title":item, type:"integer"}; return result}, {});
+    ui_shell["ui:order"] = rol
+    this.setState({
+      schema: schema_shell,
+      uischema: ui_shell
+    })
   },
   onSubmit:function(form_data){
-    //console.log (form_data.formData)
-    //axios.post('post_program_rankings', form_data.formData);
     AppDispatcher.handleAction({
         actionType: "SET_PROGRAM_RANKINGS",
         data: form_data.formData
       })
-    this.context.router.push ({pathname:'results',
-    state: {
-      rol: this.state.rol, 
-      program_rankings:form_data.formData,
-      basic_info: this.state.basic_info
-    }
+    this.context.router.push ({pathname:'results'
   })
   },
 	render() {
-    console.log(this.state.formData)
     return (
       
 
@@ -59,6 +51,7 @@ var programRanking = React.createClass({
       <Form schema={this.state.schema}
       onSubmit={this.onSubmit}
       uiSchema={this.state.uischema}
+      formData={this.state.formData}
       />
       </div>
       )

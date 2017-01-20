@@ -19,37 +19,27 @@ const formData = {
 var Home = React.createClass({
   getInitialState: function () {
     return {
-      basic_info: store.getBasicInfo(),
-      schema:home_form,
-      formData:{alias:"AG"}
+      schema: home_form,
+      formData: store.getBasicInfo(),
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
 	},
-  handleUpdateUser: function(e){
-    this.setState ({
-      username : e.target.value
-    })
 
-  },
   componentWillMount: function() {
-      AppDispatcher.handleAction({
-        actionType: "SET_ALIAS",
-        data: "NM"
-      }) 
   },
+  
 	onSubmit: function (form_data) {
-    
-    this.setState({basic_info: form_data.formData})
+    AppDispatcher.handleAction({
+      actionType: "SET_BASIC_INFO",
+      data: form_data.formData
+    })
 		this.context.router.push({
-      pathname:'rol/', 
-      state:{
-          basic_info:form_data.formData
-        }})
+      pathname:'rol/'
+    })
 	},
   render() {
-    console.log('this', typeof(this.state.schema))
-    console.log('th1s', typeof(home_form))
+    
     	return (
       	<div>
       		<div className="col-md-6 col-md-offset-3">

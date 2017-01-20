@@ -23,7 +23,6 @@ def print_this():
 
 @application.route('/get_basic_info_schema')
 def get_basic_info_schema():
-    print(json.dumps(fg.generate_specialty_form()))
     return json.dumps(fg.generate_specialty_form())
 
 @application.route('/post_basic_info', methods=['POST'])
@@ -53,6 +52,7 @@ def get_program_schema():
     programs = json.loads(request.data)
     #print (programs)
     schema = fg.generate_program_form(programs)
+    print json.dumps(schema)
     return json.dumps(schema)
 
 
@@ -61,6 +61,7 @@ def get_rol_schema():
     r = request.get_json()
     field = json.loads(request.data)['specialty']
     #print field
+    print json.dumps(fg.generate_rol_form(field))
     return json.dumps(fg.generate_rol_form(field))
 
 @application.route('/get_match_results', methods=['POST'])

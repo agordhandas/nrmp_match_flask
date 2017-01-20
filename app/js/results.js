@@ -4,6 +4,8 @@ var axios = require('axios');
 var helpers = require ('./helpers.js');
 import Form from "react-jsonschema-form";
 import JsonTable from "react-json-table"
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 
 const columns = [
     {key:'program', label:'Program'},
@@ -18,13 +20,17 @@ var results = React.createClass({
 		router:React.PropTypes.object.isRequired
 	},
 	componentWillMount: function (){
-		axios.post ('get_match_results', this.props.location.state)
+    var input_data = {
+      'rol': store.getRol().listOfStrings,
+      'program_rankings': store.getProgramRankings(),
+      'basic_info': store.getBasicInfo()
+    };
+		axios.post ('get_match_results', input_data)
 		.then(function(value){this.setState({
       match:value.data
     })}.bind(this));
 	},
   	render() {
-      console.log (this.state.match)
     	return (
       	<div>
       		<div className="jumbotron col-sm-12 text-center">

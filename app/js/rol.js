@@ -1,47 +1,64 @@
 import React from 'react';
 import Children from 'react';
 import Form from "react-jsonschema-form";
-import schema from './rol_form.js';
 var axios = require('axios');
+var store = require('../Stores/stores.js')
+var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
+var rolForm = require('../Forms/rol_form.js')
+
+var isEmpty = function(obj) {
+    var p;
+    for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            return false;
+        }
+    }
+    return true;
+};
 
 var rol = React.createClass({
 	getInitialState: function () {
   	return {
-  		schema:{},
-  		basic_info: this.props.location.state.basic_info,
+  		schema:rolForm,
+  		options:[],
+  		basic_info: store.getBasicInfo(),
   		//refill:{"listOfStrings":this.props.location.rol},
-  		prefill:{}
+  		formData: store.getRol(),
+  		prefill: {}
   	}},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
 	},
 	onSubmit(form_data) {
-		axios.post('post_rol', 
-			form_data.formData.listOfStrings);
+		AppDispatcher.handleAction({
+        actionType: "SET_ROL",
+        data: form_data.formData
+      })
 		this.context.router.push ({
-				pathname: 'programRanking/',
-				state:{
-					rol:form_data.formData.listOfStrings,
-					basic_info: this.state.basic_info
-				}
+				pathname: 'programRanking/'
+				
 	})
 	},
 	componentWillMount: function() {
-		var basic_info = this.state.basic_info
+		var basic_info = store.getBasicInfo()
+
 		axios.post('/get_rol_schema', basic_info).
 			then(function(value){
+				var mySchema = this.state.schema
+				mySchema.properties.listOfStrings.items.enum = value.data
 				this.setState({
-					schema:value.data,
+					schema: mySchema,
 					prefill: {"listOfStrings":[
-					value.data.properties.listOfStrings.items.enum[0], 
-					value.data.properties.listOfStrings.items.enum[1],
-					value.data.properties.listOfStrings.items.enum[2]
+					value.data[0], 
+					value.data[1],
+					value.data[2]
 					]}
 				})}.bind(this))
 
 	},
 	render() {
-	//console.log(this.state.refill['listOfStrings']==undefined)
+		var rolData = store.getRol()
+		var formData = isEmpty(rolData) ? this.state.prefill : store.getRol();
 	return (
 		<div className="col-md-6 col-md-offset-3 height:'400px'">
 			<br/><br/><br/>
@@ -54,7 +71,7 @@ var rol = React.createClass({
     		</div>
     		<Form schema={this.state.schema}
     		onSubmit={this.onSubmit}
-    		formData={this.state.prefill}/>
+    		formData={formData}/>
     	</div>
 
     	)

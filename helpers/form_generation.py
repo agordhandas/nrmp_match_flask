@@ -4,7 +4,7 @@ import sql_helper
 def generate_specialty_form():
     place_holder_schema = {
         "type": "object",
-        "required":["alias", "specialty"],
+        "required":[],
         "properties": {
             "alias": {
                 "type": "string",
@@ -46,7 +46,7 @@ def generate_rol_form(specialty):
     program_list.sort()
     place_holder_schema['properties']['listOfStrings']['items']['enum'] = program_list
     schema = place_holder_schema
-    return schema
+    return program_list
 
 
 def generate_program_form(programs):

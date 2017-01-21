@@ -7,6 +7,9 @@ import JsonTable from "react-json-table"
 var store = require('../Stores/stores.js')
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 
+var namespace = '/test';
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
 const columns = [
     {key:'program', label:'Program'},
     {key: 'chances', label: 'Chances'}]
@@ -25,8 +28,10 @@ var results = React.createClass({
       'program_rankings': store.getProgramRankings(),
       'basic_info': store.getBasicInfo()
     };
-		axios.post ('get_match_results', input_data)
-		.then(function(value){this.setState({
+		//axios.post ('get_match_results', input_data)
+    socket.emit('get_match_results', {'data': input_data})
+    socket.on('match_result', function(value){
+      this.setState({
       match:value.data
     })}.bind(this));
 	},

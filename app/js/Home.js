@@ -1,6 +1,5 @@
 import React from 'react';
 import Children from 'react';
-var axios = require('axios');
 var helpers = require ('./helpers.js');
 var store = require('../Stores/stores.js')
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
@@ -8,7 +7,8 @@ var home_form = require('../Forms/homeForm')
 import Form from "react-jsonschema-form";
 //import schema from './form.js';
 
-
+var namespace = '/test';
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
 const formData = {
   alias: "First task",
@@ -27,6 +27,7 @@ var Home = React.createClass({
 	},
 
   componentWillMount: function() {
+    socket.emit('test_stream')
   },
   
 	onSubmit: function (form_data) {
@@ -39,7 +40,9 @@ var Home = React.createClass({
     })
 	},
   render() {
-    
+      socket.on('stream', function(k){
+        console.log(k)
+      })
     	return (
       	<div>
       		<div className="col-md-6 col-md-offset-3">

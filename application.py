@@ -1,14 +1,14 @@
 import json
 import pickle
 from flask_socketio import SocketIO, emit, send
-
+import eventlet
 from flask import Flask, render_template, request
 from helpers import form_generation as fg
 from match_algo import run_match
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(application, logger=True, ping_timeout=600)
+socketio = SocketIO(application, logger=True, ping_timeout=600, engineio_logger=True    )
 socketio.pingTimeOut = 120000
 
 @socketio.on('connect')
@@ -58,7 +58,8 @@ def get_match_results(message):
         simulation_results.append(result)
         counter = counter + 1
         print "counter", counter
-        emit('counter', {'data': counter})
+        emit('counter', {'data': float(counter)/200})
+        eventlet.sleep(0.1)
     unique_results = list(set(simulation_results))
     result_count = {program: 0 for program in unique_results}
     for program in simulation_results:

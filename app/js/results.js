@@ -6,6 +6,7 @@ import Form from "react-jsonschema-form";
 import JsonTable from "react-json-table"
 var store = require('../Stores/stores.js')
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 var namespace = '/test';
 var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
@@ -20,7 +21,7 @@ var results = React.createClass({
 	getInitialState: function () {
     return {
       counter: 0,
-      match:[{'program':'processing', 'chances':'This may take a minute to load...'}]
+      match:[]
     }},
 	contextTypes: {
 		router:React.PropTypes.object.isRequired
@@ -35,23 +36,29 @@ var results = React.createClass({
     socket.emit('get_match_results', {'data': input_data})
 	},
 
-  componentDidUpdate: function(){
+  componentDidMount: function(){
     socket.on('counter', function(value){
-        console.log(value.data)
-      })
-  },
-
-  	render() {
-
-      socket.on('match_result', function(value){
+        this.setState({
+          counter: value.data
+        })
+      }.bind(this))
+    socket.on('match_result', function(value){
         console.log(value)
         this.setState({
       match:value.data
     })}.bind(this));
+  },
+
+  	render() {
+      var displayText = "Processing... Progress: " + this.state.counter/2 + '%'
     	return (
       	<div>
       		<div className="col-md-6 col-md-offset-3 height:'400px'">
-      		<div><JsonTable rows={this.state.match} columns={columns} /></div>	
+      		<BootstrapTable data={this.state.match} striped hover options={ { noDataText: displayText } }>
+      <TableHeaderColumn isKey dataField='program'>Program</TableHeaderColumn>
+      <TableHeaderColumn dataField='chances'>Probability of Matching (%)</TableHeaderColumn>
+  </BootstrapTable>
+          <div>{this.state.counter}</div>
       		</div>
       	</div>
     	)

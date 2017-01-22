@@ -129,5 +129,15 @@ if __name__ == "__main__":
                  'rol': ['Abbott-Northwestern Hospital Program',
                          'Abington Memorial Hospital Program',
                          'Advocate Health Care (Advocate Illinois Masonic Medical Center) Program']}
-    a = run_match(user_data['basic_info'], user_data['rol'], user_data['program_rankings'], number_of_simulations=200)
-    print a
+    match_gen = run_match(user_data['basic_info'], user_data['rol'], user_data['program_rankings'], number_of_simulations=200)
+    simulation_results = []
+    counter = 0
+    for result in match_gen:
+        simulation_results.append(result)
+        counter = counter + 1
+    unique_results = list(set(simulation_results))
+    result_count = {program: 0 for program in unique_results}
+    for program in simulation_results:
+        result_count.update({program:result_count[program] + 1})
+
+    print result_count

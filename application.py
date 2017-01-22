@@ -8,7 +8,7 @@ from match_algo import run_match
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(application, logger=True, ping_timeout=600, engineio_logger=True    )
+socketio = SocketIO(application, logger=True, ping_timeout=600, engineio_logger=True)
 socketio.pingTimeOut = 120000
 
 @socketio.on('connect')
@@ -57,9 +57,9 @@ def get_match_results(message):
     for result in match_gen:
         simulation_results.append(result)
         counter = counter + 1
-        print "counter", counter
-        emit('counter', {'data': float(counter)/200})
-        eventlet.sleep(0.1)
+        if counter % 2 == 0:
+            emit('counter', {'data': float(counter)})
+            eventlet.sleep(0.1)
     unique_results = list(set(simulation_results))
     result_count = {program: 0 for program in unique_results}
     for program in simulation_results:

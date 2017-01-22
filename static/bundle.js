@@ -14182,13 +14182,14 @@
 
 	var EventEmitter = __webpack_require__(115).EventEmitter;
 
-	var socket2 = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+	var namespace = '/test';
+	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
 	var _store = {
 	  basic_info: {},
 	  programRankings: {},
 	  rol: {},
-	  socket: socket2
+	  socket: socket
 	};
 
 	var store = {
@@ -38094,6 +38095,7 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
+	      counter: 0,
 	      match: [{ 'program': 'processing', 'chances': 'This may take a minute to load...' }]
 	    };
 	  },
@@ -38108,19 +38110,28 @@
 	    };
 	    //axios.post ('get_match_results', input_data)
 	    socket.emit('get_match_results', { 'data': input_data });
+	  },
+
+	  componentDidUpdate: function componentDidUpdate() {
+	    socket.on('counter', function (value) {
+	      console.log(value.data);
+	    });
+	  },
+
+	  render: function render() {
+
 	    socket.on('match_result', function (value) {
+	      console.log(value);
 	      this.setState({
 	        match: value.data
 	      });
 	    }.bind(this));
-	  },
-	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'jumbotron col-sm-12 text-center' },
+	        { className: 'col-md-6 col-md-offset-3 height:\'400px\'' },
 	        _react2.default.createElement(
 	          'div',
 	          null,

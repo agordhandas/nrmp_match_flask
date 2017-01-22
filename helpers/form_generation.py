@@ -1,4 +1,4 @@
-import sql_helper
+import sql_helper_match
 
 
 def generate_specialty_form():
@@ -18,7 +18,7 @@ def generate_specialty_form():
         }
     }
     specialty_list = [x[0] for
-                      x in sql_helper.run_query("select distinct(specialty) "
+                      x in sql_helper_match.run_query("select distinct(specialty) "
                                                 "FROM programs WHERE programs.specialty "
                                                 "in (SELECT specialty FROM number_of_positions);")]
     specialty_list.sort()
@@ -42,7 +42,7 @@ def generate_rol_form(specialty):
     }
 
     program_list = [x[0] for x in
-                    sql_helper.run_query("SELECT program_name from programs WHERE specialty='%s'" % specialty)]
+                    sql_helper_match.run_query("SELECT program_name from programs WHERE specialty='%s'" % specialty)]
     program_list.sort()
     place_holder_schema['properties']['listOfStrings']['items']['enum'] = program_list
     schema = place_holder_schema

@@ -2,13 +2,16 @@ var AppDispatcher = require('../Dispatcher/AppDispatcher');
 
 var EventEmitter = require('events').EventEmitter;
 
-const socket2 = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+var namespace = '/test';
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+
 
 var _store = {
   basic_info: {},
   programRankings : {},
   rol: {},
-  socket : socket2
+  socket : socket
 };
 
 

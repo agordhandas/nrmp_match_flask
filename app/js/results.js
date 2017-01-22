@@ -10,6 +10,8 @@ var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 var namespace = '/test';
 var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
+
+
 const columns = [
     {key:'program', label:'Program'},
     {key: 'chances', label: 'Chances'}]
@@ -17,6 +19,7 @@ const columns = [
 var results = React.createClass({
 	getInitialState: function () {
     return {
+      counter: 0,
       match:[{'program':'processing', 'chances':'This may take a minute to load...'}]
     }},
 	contextTypes: {
@@ -30,15 +33,24 @@ var results = React.createClass({
     };
 		//axios.post ('get_match_results', input_data)
     socket.emit('get_match_results', {'data': input_data})
-    socket.on('match_result', function(value){
-      this.setState({
+	},
+
+  componentDidUpdate: function(){
+    socket.on('counter', function(value){
+        console.log(value.data)
+      })
+  },
+
+  	render() {
+
+      socket.on('match_result', function(value){
+        console.log(value)
+        this.setState({
       match:value.data
     })}.bind(this));
-	},
-  	render() {
     	return (
       	<div>
-      		<div className="jumbotron col-sm-12 text-center">
+      		<div className="col-md-6 col-md-offset-3 height:'400px'">
       		<div><JsonTable rows={this.state.match} columns={columns} /></div>	
       		</div>
       	</div>

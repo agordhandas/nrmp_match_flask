@@ -1,7 +1,7 @@
 import match_algo
 from match_classes import Applicants
 from match_classes import tempMatchBuffer
-from helpers import sql_helper
+from helpers import sql_helper_match
 import random
 import time
 from multiprocessing import Pool
@@ -83,40 +83,34 @@ def run_match_simulation(args):
 
 
 def run_match(user_info, rank_order_list, estimated_program_rankings, number_of_simulations=200):
-    programs = [x[0] for x in sql_helper.run_query("select program_name FROM "
+    programs = [x[0] for x in sql_helper_match.run_query("select program_name FROM "
                                                    "programs WHERE specialty='%s';" % user_info['specialty'])]
-    number_of_applicants = [x[0] for x in sql_helper.run_query("select applicants "
+    number_of_applicants = [x[0] for x in sql_helper_match.run_query("select applicants "
                                                                "FROM number_of_positions "
                                                                "WHERE specialty='%s';" % user_info['specialty'])][0]
-    total_positions = [x[0] for x in sql_helper.run_query("select total_positions "
+    total_positions = [x[0] for x in sql_helper_match.run_query("select total_positions "
                                                           "FROM number_of_positions "
                                                           "WHERE specialty='%s';" % user_info['specialty'])][0]
     #Run simulation set number of times
-    #simulation_results = [''] * number_of_simulations
-    my_pool = Pool(10)
+
+    #my_pool = Pool(10)
     args = [user_info,
             rank_order_list,
             estimated_program_rankings,
             programs,
             number_of_applicants,
             total_positions]
-    simulation_results = my_pool.map(run_match_simulation, [args]*number_of_simulations)
+    #simulation_results = my_pool.map(run_match_simulation, [args]*number_of_simulations)
     #print simulation_results
-    """for i in range(number_of_simulations):
-        match = run_match_simulation({'user_info': user_info,
-                                      'rank_order_list': rank_order_list,
-                                      'estimated_program_rankings': estimated_program_rankings,
-                                      'programs': programs,
-                                      'number_of_applicants': number_of_applicants,
-                                      'total_positions': total_positions})
-        simulation_results[i] = match"""
-
-    #Get the most common result
-    unique_results = list(set(simulation_results))
-    result_count = {program: 0 for program in unique_results}
-    for program in simulation_results:
-        result_count.update({program:result_count[program] + 1})
-    return result_count
+    #simulation_results = [''] * number_of_simulations
+    for i in range(number_of_simulations):
+        match = run_match_simulation([user_info,
+                                      rank_order_list,
+                                      estimated_program_rankings,
+                                      programs,
+                                      number_of_applicants,
+                                      total_positions])
+        yield match
 
 
 def invert_dol_nonunique(d):
@@ -128,16 +122,22 @@ def invert_dol_nonunique(d):
 
 
 if __name__ == "__main__":
-    user_info = {"alias": "ag",
-                 "specialty": "Internal Medicine"}
-    rank_order_list = ["Abbott-Northwestern Hospital Program",
-                       "Abington Memorial Hospital Program",
-                       "Advocate Health Care (Advocate Illinois Masonic Medical Center) Program",
-                       "Allegiance Health Program"]
-    estimated_program_rankings = {"Advocate Health Care (Advocate Illinois Masonic Medical Center) Program": 5,
-                                  "Abington Memorial Hospital Program": 21,
-                                  "Allegiance Health Program": 6,
-                                  "Abbott-Northwestern Hospital Program": 12}
-    a = run_match(user_info, rank_order_list, estimated_program_rankings, number_of_simulations=200)
+    user_data = {'basic_info': {'alias': 'yoyo', 'specialty': 'Internal Medicine'},
+                 'program_rankings': {'Abbott-Northwestern Hospital Program': 12,
+                                      'Abington Memorial Hospital Program': 2,
+                                      'Advocate Health Care (Advocate Illinois Masonic Medical Center) Program': 4},
+                 'rol': ['Abbott-Northwestern Hospital Program',
+                         'Abington Memorial Hospital Program',
+                         'Advocate Health Care (Advocate Illinois Masonic Medical Center) Program']}
+    match_gen = run_match(user_data['basic_info'], user_data['rol'], user_data['program_rankings'], number_of_simulations=200)
+    simulation_results = []
+    counter = 0
+    for result in match_gen:
+        simulation_results.append(result)
+        counter = counter + 1
+    unique_results = list(set(simulation_results))
+    result_count = {program: 0 for program in unique_results}
+    for program in simulation_results:
+        result_count.update({program:result_count[program] + 1})
 
-    print a
+    print result_count

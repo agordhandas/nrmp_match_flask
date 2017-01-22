@@ -6,6 +6,9 @@ var store = require('../Stores/stores.js')
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js')
 var rolForm = require('../Forms/rol_form.js')
 
+var namespace = '/test';
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
 var isEmpty = function(obj) {
     var p;
     for (p in obj) {
@@ -40,10 +43,14 @@ var rol = React.createClass({
 	})
 	},
 	componentWillMount: function() {
+		console.log(socket)
 		var basic_info = store.getBasicInfo()
+		console.log(basic_info)
 
-		axios.post('/get_rol_schema', basic_info).
-			then(function(value){
+		//axios.post('/get_rol_schema', basic_info).
+	  	socket.emit('get rol schema', {data: basic_info});
+      	socket.on('rol_schema', function(value){
+      			console.log(value)
 				var mySchema = this.state.schema
 				mySchema.properties.listOfStrings.items.enum = value.data
 				this.setState({

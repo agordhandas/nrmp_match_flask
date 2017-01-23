@@ -8,7 +8,7 @@ from match_algo import run_match
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(application, logger=True, ping_timeout=600, engineio_logger=True)
+socketio = SocketIO(application, ping_timeout=600)
 socketio.pingTimeOut = 120000
 
 @socketio.on('connect')
@@ -45,9 +45,7 @@ def test_stream():
 
 @socketio.on('get_match_results', namespace='/test')
 def get_match_results(message):
-    print("getting results")
     data = message['data']
-    print (data)
     rank_order_list = data['rol']
     estimated_program_rankings = data['program_rankings']
     user_info = data['basic_info']

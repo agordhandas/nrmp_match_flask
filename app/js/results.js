@@ -34,9 +34,9 @@ var results = React.createClass({
     };
 		//axios.post ('get_match_results', input_data)
     socket.emit('get_match_results', {'data': input_data})
-	},
+	
 
-  componentDidMount: function(){
+  
     socket.on('counter', function(value){
         this.setState({
           counter: value.data
@@ -45,7 +45,9 @@ var results = React.createClass({
     socket.on('match_result', function(value){
         console.log(value)
         this.setState({
-      match:value.data
+      match:value.data.sort(function(a, b) {
+    return parseFloat(b.chances) - parseFloat(a.chances);
+      })
     })}.bind(this));
   },
 
@@ -58,7 +60,7 @@ var results = React.createClass({
       <TableHeaderColumn isKey dataField='program'>Program</TableHeaderColumn>
       <TableHeaderColumn dataField='chances'>Probability of Matching (%)</TableHeaderColumn>
   </BootstrapTable>
-          <div>{this.state.counter}</div>
+          
       		</div>
       	</div>
     	)

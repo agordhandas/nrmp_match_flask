@@ -54,7 +54,7 @@ var Home = React.createClass({
           Following the interviews, aspirants submit a Rank Order List (ROL), comprising of 
           their preferred residency programs, in order. Simulataneously, programs too rank the 
           candidates they interviewed throughout the season. An algorithm, a variant of the famous 
-          Galey-Sharp theorem then tries to match up each applicant to a program.</p>
+          Gale-Shapley algorithm then tries to match up each applicant to a program.</p>
           <p>Here's your chance to run a simulation of the match algorithm. You will be asked to 
           pick a specialty, submit a rank order list and an estimate of where you think each program you 
           rank might rank you. The computer will take over from there...</p>

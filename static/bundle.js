@@ -38113,9 +38113,7 @@
 	    };
 	    //axios.post ('get_match_results', input_data)
 	    socket.emit('get_match_results', { 'data': input_data });
-	  },
 
-	  componentDidMount: function componentDidMount() {
 	    socket.on('counter', function (value) {
 	      this.setState({
 	        counter: value.data
@@ -38124,7 +38122,9 @@
 	    socket.on('match_result', function (value) {
 	      console.log(value);
 	      this.setState({
-	        match: value.data
+	        match: value.data.sort(function (a, b) {
+	          return parseFloat(b.chances) - parseFloat(a.chances);
+	        })
 	      });
 	    }.bind(this));
 	  },
@@ -38150,11 +38150,6 @@
 	            { dataField: 'chances' },
 	            'Probability of Matching (%)'
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          this.state.counter
 	        )
 	      )
 	    );

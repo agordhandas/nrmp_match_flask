@@ -10,6 +10,7 @@ from multiprocessing import Pool
 def run_match_simulation(args):
 
     user_info = args[0]
+    user_info.update({'alias': 'place_holder'})
     rank_order_list = args[1]
     estimated_program_rankings = args[2]
     programs = args[3]

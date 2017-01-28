@@ -60,7 +60,7 @@ var Home = React.createClass({
           rank might rank you. The computer will take over from there...</p>
           <hr/>
             
-            <p> To start off, pick a nickname for yourself and a specialty </p>
+            <p> To start off, pick a specialty </p>
       			 <Form schema={home_form}
              onSubmit={this.onSubmit}
              formData={this.state.formData}

@@ -168,7 +168,7 @@
 	        _react2.default.createElement(
 	          'p',
 	          null,
-	          'Every year, thousands of medical students and recently graduated doctors apply for residency spots across the country. The match process, called the National Residency Match Program (NRMP) involves residency aspirants applying to numerous programs, and receiving invitations to interview at some or all of them. Following the interviews, aspirants submit a Rank Order List (ROL), comprising of their preferred residency programs, in order. Simulataneously, programs too rank the candidates they interviewed throughout the season. An algorithm, a variant of the famous Galey-Sharp theorem then tries to match up each applicant to a program.'
+	          'Every year, thousands of medical students and recently graduated doctors apply for residency spots across the country. The match process, called the National Residency Match Program (NRMP) involves residency aspirants applying to numerous programs, and receiving invitations to interview at some or all of them. Following the interviews, aspirants submit a Rank Order List (ROL), comprising of their preferred residency programs, in order. Simulataneously, programs too rank the candidates they interviewed throughout the season. An algorithm, a variant of the famous Gale-Shapley algorithm then tries to match up each applicant to a program.'
 	        ),
 	        _react2.default.createElement(
 	          'p',
@@ -179,7 +179,7 @@
 	        _react2.default.createElement(
 	          'p',
 	          null,
-	          ' To start off, pick a nickname for yourself and a specialty '
+	          ' To start off, pick a specialty '
 	        ),
 	        _react2.default.createElement(_reactJsonschemaForm2.default, { schema: home_form,
 	          onSubmit: this.onSubmit,
@@ -14882,10 +14882,6 @@
 		"required": [],
 		"type": "object",
 		"properties": {
-			"alias": {
-				"type": "string",
-				"title": "Nickname"
-			},
 			"specialty": {
 				"enum": ["Anesthesiology", "Dermatology", "Emergency Medicine", "Family Medicine", "Internal Medicine", "Internal Medicine/Emergency Medicine", "Internal Medicine/Pediatrics", "Internal Medicine/Psychiatry", "Neurological Surgery", "Obstetrics and Gynecology", "Otolaryngology", "Pathology", "Pediatrics", "Physical Medicine and Rehabilitation", "Plastic Surgery", "Psychiatry", "Radiation Oncology", "Radiology - Diagnostic", "Surgery - General"],
 				"type": "string",

@@ -66,7 +66,16 @@ var Home = React.createClass({
              formData={this.state.formData}
              
              />
-            
+
+          <hr/>
+          <p><small> By using the simulation, you understand and agree that:
+          <ul>
+          <li>This is just a simulation. I obviously make no implicit or explicit guarantees about the accuracy of the simulation</li>
+          <li>Neither this simulation, nor I, are in any way affiliated with NRMP</li>
+          <li>The simulation is based on the description of the algorithm published on the NRMP website — my interpretation may be flawed.</li>
+          </ul>
+          Happy Matching!</small>
+          </p>  
            
       		</div>
       	</div>

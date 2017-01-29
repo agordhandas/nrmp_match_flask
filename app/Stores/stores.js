@@ -8,7 +8,7 @@ var socket = io.connect(location.protocol + '//' + document.domain + ':' + locat
 
 
 var _store = {
-  basic_info: {},
+  basic_info: {'specialty': 'Internal Medicine/Psychiatry'},
   programRankings : {},
   rol: {},
   socket : socket

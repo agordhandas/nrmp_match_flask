@@ -123,14 +123,22 @@ def invert_dol_nonunique(d):
 
 
 if __name__ == "__main__":
-    user_data = {'basic_info': {'alias': 'yoyo', 'specialty': 'Internal Medicine'},
-                 'program_rankings': {'Abbott-Northwestern Hospital Program': 12,
-                                      'Abington Memorial Hospital Program': 2,
-                                      'Advocate Health Care (Advocate Illinois Masonic Medical Center) Program': 4},
-                 'rol': ['Abbott-Northwestern Hospital Program',
-                         'Abington Memorial Hospital Program',
-                         'Advocate Health Care (Advocate Illinois Masonic Medical Center) Program']}
-    match_gen = run_match(user_data['basic_info'], user_data['rol'], user_data['program_rankings'], number_of_simulations=200)
+    user_data = {'basic_info': {'alias': 'yoyo', 'specialty': 'Pathology'},
+                 'program_rankings': {"University of Rochester Program": 5, 
+                                      "Mayo Clinic College of Medicine and Science (Rochester) Program": 15, 
+                                      "University of California (San Diego) Program": 8, 
+                                      "Cedars-Sinai Medical Center Program": 5, 
+                                      "University of California (San Francisco) Program": 25, 
+                                      "University of Illinois College of Medicine at Chicago Program": 10, 
+                                      "University of Utah Program": 15},
+                 'rol': ["University of California (San Francisco) Program", 
+                         "Mayo Clinic College of Medicine and Science (Rochester) Program", 
+                         "University of California (San Diego) Program", 
+                         "University of Rochester Program", 
+                         "University of Utah Program", 
+                         "Cedars-Sinai Medical Center Program", 
+                         "University of Illinois College of Medicine at Chicago Program"]}
+    match_gen = run_match(user_data['basic_info'], user_data['rol'], user_data['program_rankings'], number_of_simulations=1000)
     simulation_results = []
     counter = 0
     for result in match_gen:

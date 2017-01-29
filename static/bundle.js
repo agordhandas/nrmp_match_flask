@@ -185,7 +185,37 @@
 	          onSubmit: this.onSubmit,
 	          formData: this.state.formData
 
-	        })
+	        }),
+	        _react2.default.createElement('hr', null),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          _react2.default.createElement(
+	            'small',
+	            null,
+	            ' By using the simulation, you understand and agree that:',
+	            _react2.default.createElement(
+	              'ul',
+	              null,
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                'This is just a simulation. I obviously make no implicit or explicit guarantees about the accuracy of the simulation'
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                'Neither this simulation, nor I, are in any way affiliated with NRMP'
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                'The simulation is based on the description of the algorithm published on the NRMP website\u200A\u2014\u200Amy interpretation may be flawed.'
+	              )
+	            ),
+	            'Happy Matching!'
+	          )
+	        )
 	      )
 	    );
 	  }
@@ -14186,7 +14216,7 @@
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
 	var _store = {
-	  basic_info: {},
+	  basic_info: { 'specialty': 'Internal Medicine/Psychiatry' },
 	  programRankings: {},
 	  rol: {},
 	  socket: socket

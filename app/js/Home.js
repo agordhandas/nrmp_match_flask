@@ -57,7 +57,9 @@ var Home = React.createClass({
           Gale-Shapley algorithm then tries to match up each applicant to a program.</p>
           <p>Here's your chance to run a simulation of the match algorithm. You will be asked to 
           pick a specialty, submit a rank order list and an estimate of where you think each program you 
-          rank might rank you. The computer will take over from there...</p>
+          rank might rank you. The computer will take over from there. The underlying data (programs participating 
+          in the match for a particular specialty, average number of applicants for a specialty, average number of positions etc.) 
+          is based on Match 2016, as released by NRMP.</p>
           <hr/>
             
             <p> To start off, pick a specialty </p>
